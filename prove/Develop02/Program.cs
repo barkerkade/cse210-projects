@@ -1,37 +1,63 @@
-using System;
+using System.IO;
 
 class Program
 {
     public Journal journal;
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello Develop02 World!");
-    }
-    static int ShowMenu()
-    {
-        Console.WriteLine("Journal Menu.")
-    }
-        string GetPrompt()
-    {
+        Journal journal = new Journal();
+        bool exit = false;
+
+        while (!exit)
+        {
+            Console.Clear();
+            int choice = ShowMenu();
 
 
-    }
-
-    void Run()
-    {
+        }
 
     }
+    
+        static int ShowMenu()
+        {
+            Console.WriteLine("Journal Menu");
+            Console.WriteLine(" Choose one of the following:");
+            Console.WriteLine(" 1. Write");
+            Console.WriteLine(" 2. Display");
+            Console.WriteLine(" 3. Load");
+            Console.WriteLine(" 4. Save");
+            Console.WriteLine(" 5. Quit");
 
-    void SaveToFile()
-    {
-        Console.Write("Enter filename:");
-        var filename = Console.ReadLine();
-        System.IO.File.WriteAllLines(filename);
+         Console.Write("\nEnter your choice: ");
+            var choice = int.Parse(Console.ReadLine());
+         return choice;
+        
+        }
 
-    }
+        static string GetPrompt()
+        {
 
-    void LoadFromFile()
-    {
 
-    }
+        }
+
+     void Run()
+        {
+
+        }
+
+        void SaveToFile(string[] lines)
+        {
+         Console.Write("Enter filename:");
+            var filename = Console.ReadLine();
+         System.IO.File.WriteAllLines(filename, lines);
+
+     }
+
+        static string[] LoadFromFile()
+        {
+            Console.Write("Enter filename: ");
+            var filename = Console.ReadLine();
+            return System.IO.File.ReadAllLines(filename);
+        }
+    
 }
