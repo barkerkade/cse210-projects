@@ -4,12 +4,12 @@ public class Journal
 
     public Journal()
     {
-
+        entries = new List<Entry>();
     }
 
     public Journal(string import)
     {
-
+        
     }
 
     public void Display()
@@ -19,6 +19,6 @@ public class Journal
 
     public string Export()
     {
-
+        return "";
     }
 }

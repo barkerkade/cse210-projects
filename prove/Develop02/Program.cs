@@ -8,6 +8,8 @@ class Program
         Journal journal = new Journal();
         bool exit = false;
 
+        Entry entry = new Entry();
+
         while (!exit)
         {
             Console.Clear();
@@ -36,7 +38,7 @@ class Program
 
         static string GetPrompt()
         {
-
+            return "";
 
         }
 
