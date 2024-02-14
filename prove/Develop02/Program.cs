@@ -2,10 +2,11 @@ using System.IO;
 
 class Program
 {
-    public Journal journal;
+    
     static void Main(string[] args)
     {
-        Journal journal = new Journal();
+        string filename = "Journal.txt";
+        Journal journal = new Journal(filename);
         bool exit = false;
 
         Entry entry = new Entry();
@@ -14,6 +15,27 @@ class Program
         {
             Console.Clear();
             int choice = ShowMenu();
+            if(choice == 1)
+            {
+                
+            }
+            else if(choice == 2)
+            {
+                journal.Display();
+            }
+            else if (choice == 3)
+            {
+                //Ask user for filename
+                //Load new journal
+            }
+            else if(choice == 4)
+            {
+                journal.SaveFile(filename);
+            }
+            else if(choice == 5)
+            {
+                exit = true;
+            }
 
 
         }
@@ -36,16 +58,7 @@ class Program
         
         }
 
-        static string GetPrompt()
-        {
-            return "";
 
-        }
-
-     void Run()
-        {
-
-        }
 
         void SaveToFile(string[] lines)
         {

@@ -1,6 +1,7 @@
 public class Entry
 {
     public string response;
+
     public string prompt;
 
     public string date;
@@ -30,7 +31,10 @@ public class Entry
         "If I had one thing I could do over today, what would it be?"
     };
 
-    
+    public string Export()
+    {
+        return $"{response}^^{prompt}^^{date}";
+    }
 
     
 
