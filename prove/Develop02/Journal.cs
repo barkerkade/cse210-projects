@@ -1,6 +1,6 @@
 public class Journal
 {
-    public List<Entry> entries = new List<Entry>();
+    private List<Entry> entries = new List<Entry>();
 
     
 
@@ -24,12 +24,21 @@ public class Journal
         }
     }
 
+    public void AddEntry()
+    {
+        Entry entry = new Entry();
+        entries.Add(entry);
+    }
+
     public void Display()
     {
+        Console.Clear();
         foreach (Entry entry in entries)
         {
             entry.Display();
         }
+        Console.WriteLine("\nPress to continue.");
+        Console.ReadLine();
     }
 
     public void SaveFile(string filename)

@@ -40,6 +40,6 @@ public class Entry
 
     public void Display()
     {
-        Console.WriteLine(response);
+        Console.WriteLine($"{prompt}\n{response}\n{date}");
     }
 }

@@ -5,11 +5,10 @@ class Program
     
     static void Main(string[] args)
     {
-        string filename = "Journal.txt";
-        Journal journal = new Journal(filename);
+        Journal journal = new Journal();
         bool exit = false;
 
-        Entry entry = new Entry();
+        
 
         while (!exit)
         {
@@ -17,20 +16,25 @@ class Program
             int choice = ShowMenu();
             if(choice == 1)
             {
-                
+                journal.AddEntry();
             }
             else if(choice == 2)
             {
                 journal.Display();
             }
-            else if (choice == 3)
+            else if (choice == 4)
             {
+                Console.WriteLine("\nEnter filename.");
+                var newFile = Console.ReadLine();
+                journal = new Journal(newFile);
                 //Ask user for filename
                 //Load new journal
             }
-            else if(choice == 4)
+            else if(choice == 3)
             {
-                journal.SaveFile(filename);
+                Console.WriteLine("\nEnter filename.");
+                var newFile = Console.ReadLine();
+                journal.SaveFile(newFile);
             }
             else if(choice == 5)
             {
@@ -48,8 +52,8 @@ class Program
             Console.WriteLine(" Choose one of the following:");
             Console.WriteLine(" 1. Write");
             Console.WriteLine(" 2. Display");
-            Console.WriteLine(" 3. Load");
-            Console.WriteLine(" 4. Save");
+            Console.WriteLine(" 3. Save");
+            Console.WriteLine(" 4. Load");
             Console.WriteLine(" 5. Quit");
 
          Console.Write("\nEnter your choice: ");
