@@ -9,12 +9,18 @@ public class Activity
         DateTime futureTime = startTime.AddSeconds(duration);
         while(DateTime.Now < futureTime)
         {
+            Console.WriteLine(" Get ready:");
             Console.Write("|");
             Thread.Sleep(1000);
             Console.Write("\b \b");
             Console.Write("/");
+            Thread.Sleep(1000);
             Console.Write("\b \b");
-            
+            Console.Write("-");
+            Thread.Sleep(1000);
+            Console.Write("\b \b");
+            Console.Write("'\'");
+            Thread.Sleep(1000);
         }
 
     }
