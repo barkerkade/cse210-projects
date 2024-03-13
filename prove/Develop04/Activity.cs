@@ -10,6 +10,8 @@ public class Activity
     protected string description;
 
     protected string activityTitle;
+
+    protected DateTime endTime;
     
     public Activity (string description, string activityTitle)
     {
@@ -31,6 +33,11 @@ public class Activity
     {
         DisplayIntro();
         GetDuration();
+        endTime = DateTime.Now.AddSeconds(activityDuration);
+    }
+    protected bool AmIDone()
+    {
+        return DateTime.Now > endTime;
     }
     public void End()
     {

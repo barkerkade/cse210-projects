@@ -4,4 +4,17 @@ class Breathing : Activity
     {
         
     }
+    public void Start()
+    {
+        Begin();
+        while (!AmIDone())
+        {
+            Console.WriteLine("Breath in");
+            DisplaySpinner(5);
+            Console.WriteLine("Breath out");
+            DisplaySpinner(5);
+        }
+    }
+    
+    
 }
