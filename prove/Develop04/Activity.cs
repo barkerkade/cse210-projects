@@ -16,10 +16,26 @@ public class Activity
        this.description = description; 
        this.activityTitle = activityTitle;
     }
+    public void GetDuration()
+    {
+        Console.WriteLine($"How long do you want to do {activityTitle}?");
+        activityDuration = int.Parse(Console.ReadLine());
+        
+    }
 
     public void DisplayIntro()
     {
         Console.WriteLine($"Welcome to the {activityTitle} \n\n {description}");
+    }
+    public void Begin()
+    {
+        DisplayIntro();
+        GetDuration();
+    }
+    public void End()
+    {
+        Console.WriteLine($"Congrats on completing {activityTitle}! ");
+        Thread.Sleep(3000);
     }
     protected void DisplaySpinner(int duration)
     {
@@ -39,7 +55,7 @@ public class Activity
             Console.Write("-");
             Thread.Sleep(1000);
             Console.Write("\b \b");
-            Console.Write("'\'");
+            Console.Write("\\");
             Thread.Sleep(1000);
         }
 
