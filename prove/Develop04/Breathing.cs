@@ -7,6 +7,7 @@ class Breathing : Activity
     public void Start()
     {
         Begin();
+        Console.WriteLine("Get Ready");
         while (!AmIDone())
         {
             Console.WriteLine("Breath in");
@@ -14,6 +15,8 @@ class Breathing : Activity
             Console.WriteLine("Breath out");
             DisplaySpinner(5);
         }
+
+        End();
     }
     
     

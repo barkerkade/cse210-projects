@@ -12,6 +12,10 @@ public class Activity
     protected string activityTitle;
 
     protected DateTime endTime;
+
+    protected string prompt;
+
+    protected string question;
     
     public Activity (string description, string activityTitle)
     {
@@ -44,6 +48,7 @@ public class Activity
         Console.WriteLine($"Congrats on completing {activityTitle}! ");
         Thread.Sleep(3000);
     }
+
     protected void DisplaySpinner(int duration)
     {
         DateTime startTime = DateTime.Now;
@@ -52,7 +57,6 @@ public class Activity
 
         while(DateTime.Now < futureTime)
         {
-            Console.WriteLine(" Get ready:");
             Console.Write("|");
             Thread.Sleep(1000);
             Console.Write("\b \b");
@@ -64,7 +68,10 @@ public class Activity
             Console.Write("\b \b");
             Console.Write("\\");
             Thread.Sleep(1000);
+            Console.Write("\b \b");
+
         }
 
     }
+
 }

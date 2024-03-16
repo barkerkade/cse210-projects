@@ -6,24 +6,29 @@ class Program
     {
         
         bool exit = false;
+        Breathing breathingActivity = new Breathing();
+
+        Listing listingActivity = new Listing();
+
+        Reflecting reflectingActivity = new Reflecting();
 
         
 
         while (!exit)
         {
-            Console.Clear();
+           //Console.Clear();
             int choice = ShowMenu();
             if(choice == 1)
             {
-                
+                breathingActivity.Start();
             }
             else if(choice == 2)
             {
-                
+                reflectingActivity.StartReflecting();
             }
             else if (choice == 3)
             {
-               
+                listingActivity.StartListing();
             }
             
             else if(choice == 4)
