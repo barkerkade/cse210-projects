@@ -1,9 +1,11 @@
-class Patron : Person
+class Patron
 {
-    public List<Book> BorrowedBooks { get; set; }
+    public string Name { get; set; }
+    public int ID { get; set; }
 
-    public Patron()
+    public Patron(string name, int id)
     {
-        BorrowedBooks = new List<Book>();
+        Name = name;
+        ID = id;
     }
 }

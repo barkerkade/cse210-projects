@@ -1,13 +1,13 @@
 class Library
 {
-    private List<Book> books;
+    private List<LibraryItem> items;
     private List<Patron> patrons;
     private List<Transaction> transactions;
     private string txtFilePath = "library_data.txt";
 
     public Library()
     {
-        books = new List<Book>();
+        items = new List<LibraryItem>();
         patrons = new List<Patron>();
         transactions = new List<Transaction>();
         LoadDataFromTxt();
@@ -27,15 +27,28 @@ class Library
                     switch (type)
                     {
                         case "Book":
-                            Book book = new Book { Title = parts[1], Author = parts[2], Genre = parts[3], IsAvailable = bool.Parse(parts[4]) };
-                            books.Add(book);
+                            Book book = new FictionBook
+                            {
+                                Title = parts[1],
+                                Author = parts[2],
+                                Genre = parts[3],
+                                IsAvailable = bool.Parse(parts[4]),
+                                Theme = parts.Length > 5 ? parts[5] : null
+                            };
+                            items.Add(book);
                             break;
                         case "Patron":
-                            Patron patron = new Patron { Name = parts[1], ID = int.Parse(parts[2]) };
+                            Patron patron = new Patron(parts[1], int.Parse(parts[2]));
                             patrons.Add(patron);
                             break;
                         case "Transaction":
-                            Transaction transaction = new Transaction { BookTitle = parts[1], PatronName = parts[2], DueDate = DateTime.Parse(parts[3]), IsReturned = bool.Parse(parts[4]) };
+                            Transaction transaction = new Transaction
+                            {
+                                Item = items.FirstOrDefault(item => item.Title == parts[1]),
+                                Patron = patrons.FirstOrDefault(patron => patron.Name == parts[2]),
+                                DueDate = DateTime.Parse(parts[3]),
+                                IsReturned = bool.Parse(parts[4])
+                            };
                             transactions.Add(transaction);
                             break;
                     }
@@ -48,9 +61,18 @@ class Library
     {
         using (StreamWriter writer = new StreamWriter(txtFilePath))
         {
-            foreach (Book book in books)
+            foreach (LibraryItem item in items)
             {
-                writer.WriteLine($"Book|{book.Title}|{book.Author}|{book.Genre}|{book.IsAvailable}");
+                string itemData = $"{item.GetType().Name}|{item.Title}|{item.Author}";
+                if (item is Book book)
+                {
+                    itemData += $"|{book.Genre}|{book.IsAvailable}";
+                    if (book is FictionBook fictionBook)
+                    {
+                        itemData += $"|{fictionBook.Theme}";
+                    }
+                }
+                writer.WriteLine(itemData);
             }
             foreach (Patron patron in patrons)
             {
@@ -58,14 +80,14 @@ class Library
             }
             foreach (Transaction transaction in transactions)
             {
-                writer.WriteLine($"Transaction|{transaction.BookTitle}|{transaction.PatronName}|{transaction.DueDate}|{transaction.IsReturned}");
+                writer.WriteLine($"Transaction|{transaction.Item.Title}|{transaction.Patron.Name}|{transaction.DueDate}|{transaction.IsReturned}");
             }
         }
     }
 
-    public void AddBook(Book book)
+    public void AddItem(LibraryItem item)
     {
-        books.Add(book);
+        items.Add(item);
         SaveDataToTxt();
     }
 
@@ -75,36 +97,30 @@ class Library
         SaveDataToTxt();
     }
 
-    public void BorrowBook(Book book, Patron patron)
+    public void BorrowItem(LibraryItem item, Patron patron)
     {
-        if (book.IsAvailable)
+        if (item is Book book && book.IsAvailable)
         {
             book.IsAvailable = false;
-            patron.BorrowedBooks.Add(book);
-            transactions.Add(new Transaction { BookTitle = book.Title, PatronName = patron.Name, DueDate = DateTime.Now.AddDays(14) });
+            transactions.Add(new Transaction { Item = item, Patron = patron, DueDate = DateTime.Now.AddDays(14) });
             SaveDataToTxt();
-            Console.WriteLine($"{patron.Name} has borrowed {book.Title}.");
+            Console.WriteLine($"{patron.Name} has borrowed {item.Title}.");
         }
         else
         {
-            Console.WriteLine("Sorry, the book is not available for borrowing.");
+            Console.WriteLine("Sorry, the item is not available for borrowing.");
         }
     }
 
-    public void ReturnBook(Book book, Patron patron)
+    public void ReturnItem(LibraryItem item, Patron patron)
     {
-        book.IsAvailable = true;
-        patron.BorrowedBooks.Remove(book);
-        foreach (var transaction in transactions)
+        if (item is Book book)
         {
-            if (transaction.BookTitle == book.Title && transaction.PatronName == patron.Name && !transaction.IsReturned)
-            {
-                transaction.IsReturned = true;
-                SaveDataToTxt();
-                Console.WriteLine($"{patron.Name} has returned {book.Title}.");
-                return;
-            }
+            book.IsAvailable = true;
         }
+        transactions.RemoveAll(transaction => transaction.Item == item && transaction.Patron == patron && !transaction.IsReturned);
+        SaveDataToTxt();
+        Console.WriteLine($"{patron.Name} has returned {item.Title}.");
     }
 
     public void DisplayMenu()
@@ -165,9 +181,11 @@ class Library
         string author = Console.ReadLine();
         Console.Write("Genre: ");
         string genre = Console.ReadLine();
+        Console.Write("Is Available (true/false): ");
+        bool isAvailable = bool.Parse(Console.ReadLine());
 
-        Book book = new Book { Title = title, Author = author, Genre = genre };
-        AddBook(book);
+        Book book = new FictionBook { Title = title, Author = author, Genre = genre, IsAvailable = isAvailable };
+        AddItem(book);
         Console.WriteLine("Book added successfully.");
     }
 
@@ -177,7 +195,7 @@ class Library
         Console.Write("Name: ");
         string name = Console.ReadLine();
 
-        Patron patron = new Patron { Name = name, ID = patrons.Count + 1 };
+        Patron patron = new Patron(name, patrons.Count + 1);
         AddPatron(patron);
         Console.WriteLine("Patron added successfully.");
     }
@@ -191,10 +209,10 @@ class Library
         {
             Console.WriteLine("\nEnter the title of the book to borrow:");
             string bookTitle = Console.ReadLine();
-            Book book = books.FirstOrDefault(b => b.Title == bookTitle);
-            if (book != null)
+            LibraryItem item = items.FirstOrDefault(item => item.Title == bookTitle && item is Book);
+            if (item != null)
             {
-                BorrowBook(book, patron);
+                BorrowItem(item, patron);
             }
             else
             {
@@ -216,14 +234,14 @@ class Library
         {
             Console.WriteLine("\nEnter the title of the book to return:");
             string bookTitle = Console.ReadLine();
-            Book book = patron.BorrowedBooks.FirstOrDefault(b => b.Title == bookTitle);
-            if (book != null)
+            LibraryItem item = transactions.FirstOrDefault(transaction => transaction.Patron == patron && transaction.Item.Title == bookTitle)?.Item;
+            if (item != null)
             {
-                ReturnBook(book, patron);
+                ReturnItem(item, patron);
             }
             else
             {
-                Console.WriteLine($"Book '{bookTitle}' not found.");
+                Console.WriteLine($"Book '{bookTitle}' not found in the patron's borrowed items.");
             }
         }
         else

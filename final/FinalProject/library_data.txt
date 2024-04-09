@@ -1,2 +1,5 @@
-Book|Way of Kings|Brandon Sanderson|Fantasy|False
+FictionBook|Way of Kings|Brandon Sanderson|Fantasy|False|
+FictionBook|Intro to Programming with Classes|Brother Lynn|NonFiction|False|
+FictionBook|Halo: Fall of Reach|Eric Nylund|Sci-Fi|True|
 Patron|Kade Barker|1
+Patron|Sam|2

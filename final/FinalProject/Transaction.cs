@@ -1,7 +1,7 @@
 class Transaction
 {
-    public string BookTitle { get; set; }
-    public string PatronName { get; set; }
+    public LibraryItem Item { get; set; }
+    public Patron Patron { get; set; }
     public DateTime DueDate { get; set; }
     public bool IsReturned { get; set; }
 }
